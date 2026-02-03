@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Memories 💙</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg-maroon:#3b1111;
+  --beige:#d6c5bc;
+  --text:#1a0505;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--bg-maroon);
+  height:100vh;
+  display:flex;
+  flex-direction: column;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  font-family:Montserrat;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle, transparent 55%, rgba(0,0,0,.45));
+  z-index:5;
+}
+
+
+/* ================= TOP HEADER (STATIC) ================= */
+.header-title {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-size: 2.5rem;
+  color: var(--beige);
+  letter-spacing: 12px;
+  text-transform: uppercase;
+  margin-bottom: 25px; /* Space above the box */
+  z-index: 15;
+}
+
+/* ================= HEARTS ================= */
+.heart-container{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+
+.heart{
+  position:absolute;
+  color:var(--beige);
+  opacity:.5;
+  animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(110vh);}
+  to{transform:translateY(-10vh);}
+}
+
+/* ================= BOX ================= */
+.content-box{
+  position:relative;
+  z-index:10;
+  width:90vw;
+  height:75vh;
+  background:var(--beige);
+  border-radius:20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  box-shadow:0 40px 100px rgba(0,0,0,.7);
+}
+
+/* ================= 3 PHOTOS ================= */
+.slider{
+  display:flex;
+  gap:80px;
+  align-items:center;
+  justify-content:center;
+  height:460px;
+}
+
+.polaroid{
+  width:250px;
+  background:#fff;
+  padding:10px 10px 35px;
+  border-radius:6px;
+  opacity:.35;
+  transform:scale(.9);
+  transition: all 1.2s ease, opacity 0.8s ease;
+
+}
+
+.polaroid img, .polaroid video{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+  transition: opacity 0.8s ease-in-out; 
+}
+
+/* SIDE */
+.side{
+  filter:blur(1px);
+}
+
+/* CENTER SOFT EFFECT */
+.active{
+  opacity:1;
+  transform:scale(1.08); 
+  box-shadow:
+    0 0 40px rgba(255,255,255,.8),
+    0 15px 35px rgba(0,0,0,.25);
+}
+
+/* ================= LYRICS ================= */
+.lyrics{
+  margin-top:25px;
+  font-family:'Playfair Display';
+  font-style:italic;
+  font-size:1.6rem;
+  color:var(--text);
+  text-align:center;
+}
+
+/* ================= BUTTON (APPEARS BELOW BOX) ================= */
+.btn-container {
+    height: 60px; /* Reserves space so nothing jumps when it appears */
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-next {
+  padding: 12px 35px;
+  background: var(--beige);
+  color: var(--bg-maroon);
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 2s ease; /* Very slow appearance */
+  z-index: 20;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.btn-next.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.btn-next:hover {
+    background: #fff;
+}
+</style>
+</head>
+
+<body onclick="startAudio()">
+
+<div class="heart-container" id="heartBox"></div>
+
+<h1 class="header-title">Memories</h1>
+
+<div class="content-box">
+  <div class="slider">
+    <div id="left" class="polaroid side"></div>
+    <div id="center" class="polaroid active"></div>
+    <div id="right" class="polaroid side"></div>
+  </div>
+  <p id="lyric" class="lyrics"><i>Tap anywhere to start...</i></p>
+</div>
+
+<div class="btn-container">
+    <a href="cake.html" id="cakeBtn" class="btn-next">Let's have some sweet 🤭</a>
+</div>
+
+<audio id="audio" src="love.m4a"></audio>
+
+<script>
+const audio=document.getElementById("audio");
+const lyric=document.getElementById("lyric");
+const cakeBtn=document.getElementById("cakeBtn");
+
+const left=document.getElementById("left");
+const center=document.getElementById("center");
+const right=document.getElementById("right");
+
+const pics=[
+  {type:'img', src:'p1.jpg'}, // 1
+  {type:'img', src:'p2.jpg'}, // 2
+  {type:'vid', src:'p3.mp4'}, // 3 (Vdo)
+  {type:'img', src:'p4.jpg'}, // 4
+  {type:'img', src:'p5.jpg'}, // 5
+  {type:'img', src:'p6.jpg'}, // 6
+  {type:'vid', src:'p7.mp4'}, // 7 (Vdo)
+  {type:'vid', src:'p8.mp4'}, // 8 (Vdo)
+  {type:'img', src:'p9.jpg'}, // 9
+  {type:'img', src:'p10.jpg'}, // 10
+  {type:'img', src:'p11.jpg'}, // 11
+  {type:'vid', src:'p12.mp4'}, // 12 (Vdo)
+  {type:'img', src:'p13.jpg'}, // 13
+  {type:'vid', src:'p14.mp4'}, // 14 (Vdo)
+  {type:'img', src:'p15.jpg'}, // 15
+  {type:'vid', src:'p16.mp4'}  // 16 (Vdo)
+];
+
+const timeline=[
+  {t:0, text:"I .... YOU", i:0},
+  {t:10, text:"They say", i:1},
+  {t:13, text:"you know when you know", i:2},
+  {t:17, text:"So, let's face it,", i:3},
+  {t:20, text:"you had me at 'Hello'", i:4},
+  {t:24, text:"Hesitation never helps", i:5},
+  {t:28, text:"How could this be anything, anything else?", i:6},
+  {t:32, text:"When", i:7},
+  {t:34, text:"all I dream of is your eyes", i:8},
+  {t:37, text:"All I long for is your touch", i:9},
+  {t:41, text:"And, darling, something tells me", i:10},
+  {t:44, text:"that's enough, mm-mm-mm-mm", i:11},
+  {t:48, text:"You can say that I'm a fool", i:12},
+  {t:51, text:"And I don't know very much", i:13},
+  {t:55, text:"But I think", i:14},
+  {t:56, text:"they call this love", i:15},
+  {t:60, text:"💙", i:15}
+];
+
+let current=0;
+
+function render(i){
+  const L=(i-1+pics.length)%pics.length;
+  const R=(i+1)%pics.length;
+
+  updateContent(left, pics[L]);
+  updateContent(center, pics[i]);
+  updateContent(right, pics[R]);
+}
+
+function updateContent(container, item) {
+  const currentMedia = container.querySelector('img, video');
+  
+  // Create HTML based on type
+  const mediaHTML = item.type === 'vid' 
+    ? `<video src="${item.src}" autoplay muted loop style="opacity:0"></video>` 
+    : `<img src="${item.src}" style="opacity:0">`;
+
+  // Only update if source is different
+  if(!currentMedia || currentMedia.src.indexOf(item.src) === -1) {
+    container.innerHTML = mediaHTML;
+    const newMedia = container.querySelector('img, video');
+    // Tiny timeout to trigger the transition
+    setTimeout(() => { if(newMedia) newMedia.style.opacity = 1; }, 50);
+  }
+}
+
+function startAudio(){ if(audio.paused) audio.play(); }
+
+render(0);
+
+audio.addEventListener("timeupdate",()=>{
+  const line=timeline.findLast(x=>audio.currentTime>=x.t);
+  if(!line) return;
+  lyric.innerText=line.text;
+  if(line.i!==current){
+    current=line.i;
+    render(current);
+  }
+});
+
+// Show cake button when song ends
+audio.addEventListener("ended", () => {
+  cakeBtn.classList.add("show");
+
+  document.body.style.transition="2s";
+  document.body.style.filter="brightness(1.2)";
+
+  lyric.innerText="Made with all my love, only for you 💙";
+});
+
+
+/* hearts */
+const hb=document.getElementById("heartBox");
+for(let i=0;i<40;i++){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(6+Math.random()*12)+"s"; // Varied speeds
+  h.style.animationDelay=Math.random()*5+"s";
+  h.style.fontSize=(10+Math.random()*20)+"px";
+
+  hb.appendChild(h);
+}
+</script>
+
+</body>
+</html>
