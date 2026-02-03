@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>A Corner for You 💙</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300&family=Playfair+Display:ital,wght@1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-color: #3b1111; 
+      --text-white: #ffffff;
+      --glow-color: rgba(255, 255, 255, 0.4);
+      --warm-light: rgba(255, 183, 115, 0.3); 
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      color: var(--text-white);
+      background-color: #2b0d0d;
+      background: 
+        radial-gradient(circle at center, var(--warm-light) 0%, transparent 60%),
+        radial-gradient(ellipse at center, rgba(120, 40, 40, 0.9) 0%, rgba(70, 18, 18, 0.95) 40%, rgba(25, 5, 5, 1) 90%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 10%),
+        radial-gradient(circle at 80% 20%, rgba(255, 200, 150, 0.15) 0%, transparent 15%),
+        radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 8%),
+        radial-gradient(circle at 70% 60%, rgba(255, 180, 100, 0.1) 0%, transparent 12%);
+      z-index: 2;
+      filter: blur(20px);
+      animation: sparkleMove 20s infinite alternate;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.6) 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    #app {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      filter: blur(0.4px) brightness(1.1) contrast(1.1);
+      pointer-events: none;
+
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 50; /* Increased to be above background layers */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      /* Removed pointer-events: none to ensure buttons work */
+    }
+
+    .header-title {
+      margin-bottom: 20px;
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      color: var(--text-white);
+      font-weight: 300;
+      text-shadow: 0 0 15px var(--glow-color), 0 0 35px rgba(255, 255, 255, 0.3);
+      animation: reveal 4s ease-out forwards;
+    }
+
+    #typewriter-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 4vw, 1.4rem);
+      max-width: 80%;
+      min-height: 3em; /* Prevents layout jump */
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.95);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .btn-container {
+      margin-top: 60px;
+      opacity: 0;
+      transition: opacity 2s ease-in;
+      visibility: hidden; /* Hide until typing is done */
+    }
+
+    #next-btn {
+      padding: 14px 60px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-white);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50px;
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+      transition: all 0.4s ease;
+    }
+
+    #next-btn:hover {
+      background: white;
+      color: #3b1111;
+      box-shadow: 0 0 25px var(--glow-color);
+      transform: scale(1.05);
+    }
+
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: #1a0505;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 1.5s ease;
+    }
+
+    #overlay button {
+      background: none;
+      border: 1px solid #444;
+      padding: 12px 40px;
+      border-radius: 40px;
+      color: #aaa;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes sparkleMove {
+      from { transform: scale(1); opacity: 0.5; }
+      to { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    .visible { opacity: 1 !important; visibility: visible !important; }
+
+    .cursor {
+      display: inline-block;
+      width: 1px;
+      background: white;
+      margin-left: 5px;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+  </style>
+</head>
+
+<body>
+
+  <div id="overlay">
+    <button onclick="initExperience()">Open with smile and love</button>
+  </div>
+
+  <div id="app"></div>
+
+  <div class="content-layer">
+    <h1 class="header-title">Happy Birthday</h1>
+    <div id="typewriter-text"></div>
+    <div id="btn-wrap" class="btn-container">
+        <button id="next-btn" onclick="location.assign('memories.html')">YOU AND ME</button>
+    </div>
+  </div>
+
+  <audio id="bg-music" loop>
+    <source src="Until_I_Found_You.mp3" type="audio/mpeg">
+  </audio>
+
+  <script type="module">
+    import { butterfliesBackground } from 'https://unpkg.com/threejs-toys@0.0.7/build/threejs-toys.module.cdn.min.js'
+
+    const textLines = [
+        "Ummm ... so HAPPY BIRTHDAY my dearest divyam 💙",
+        "I wanted to build something as beautiful as you.",
+        "Until I found you, I never knew love could feel like this.",
+        "A small corner, crafted for you.",
+        "Always remember, you are deeply loved.",
+        "My love for you is endless... just like the stars.",
+        "May kanha ji always bless you."
+    ];
+
+    let lineIndex = 0;
+    let charIndex = 0;
+    const typingSpeed = 70; 
+    const textContainer = document.getElementById('typewriter-text');
+
+    function typeEffect() {
+      if (lineIndex < textLines.length) {
+        if (charIndex < textLines[lineIndex].length) {
+          textContainer.innerHTML = textLines[lineIndex].substring(0, charIndex + 1) + '<span class="cursor">|</span>';
+          charIndex++;
+          setTimeout(typeEffect, typingSpeed);
+        } else {
+          setTimeout(() => {
+            if (lineIndex < textLines.length - 1) {
+              lineIndex++;
+              charIndex = 0;
+              typeEffect();
+            } else {
+              const cursor = document.querySelector('.cursor');
+              if(cursor) cursor.style.display = 'none';
+              document.getElementById('btn-wrap').classList.add('visible');
+            }
+          }, 1500);
+        }
+      }
+    }
+
+    // Attach to window so the overlay button can find it
+    window.initExperience = function() {
+      const ov = document.getElementById('overlay');
+      ov.style.opacity = '0';
+      setTimeout(() => { ov.style.display = 'none'; }, 1500);
+
+      const music = document.getElementById('bg-music');
+      music.play().catch(e => console.log("Audio play blocked"));
+
+      butterfliesBackground({
+        el: document.getElementById('app'),
+        eventsEl: null,
+        gpgpuSize: 10,
+        background: 0x3b1111, 
+        material: 'basic',
+        materialParams: { transparent: true, alphaTest: 0.5 },
+        texture: 'https://assets.codepen.io/33787/butterflies.png',
+        textureCount: 4,
+        wingsScale: [1, 1, 1],
+        wingsSpeed: 0.5,
+        maxVelocity: 0.05,
+      });
+
+      setTimeout(typeEffect, 1000);
+    }
+  </script>
+</body>
+</html>

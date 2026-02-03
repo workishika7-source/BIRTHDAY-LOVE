@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Make a Wish 🎂</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --gold:#d4af37;
+  --cake:#5d4037;
+  --cake-dark:#3e2723;
+  --beige:#d6c5bc;
+  --maroon-text: #3b1111;
+}
+
+/* ---------------- Reset ---------------- */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+/* ---------------- Body ---------------- */
+body{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  font-family: 'Montserrat', sans-serif;
+  background:
+    radial-gradient(circle at center,#4a0e0e,#120203 70%),
+    radial-gradient(circle at center,transparent 60%,rgba(0,0,0,.6));
+  overflow:hidden;
+  cursor:pointer;
+}
+
+/* ⭐ ---------------- Flag Decoration ---------------- */
+.bunting {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.flag {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 45px solid var(--gold);
+  animation: sway 3s infinite ease-in-out;
+  transform-origin: top;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+.flag:nth-child(even) {
+  border-top-color: var(--beige);
+  animation-delay: 0.5s;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+/* ⭐ ---------------- Instruction (Moved Higher) ---------------- */
+.instruction{
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color:#f3e6df;
+  letter-spacing:1px;
+  margin-bottom:100px;
+  transform: translateY(-20px);
+  text-align:center;
+  line-height:1.6;
+  transition:.4s;
+  max-width: 85%;
+  z-index: 10;
+}
+
+/* ---------------- Scene ---------------- */
+.scene{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* ---------------- Table shadow ---------------- */
+.table{
+  width:420px;
+  height:22px;
+  border-radius:50%;
+  background:#1e1312;
+  filter:blur(3px);
+  margin-top:14px;
+}
+
+/* ---------------- Cake ---------------- */
+.cake{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.cake::before{
+  content:"";
+  position:absolute;
+  top:-80px;
+  width:220px;
+  height:160px;
+  background:radial-gradient(circle,rgba(255,210,100,.35),transparent 70%);
+  pointer-events:none;
+}
+
+.layer{
+  width:260px;
+  height:90px;
+  border-radius:16px;
+  background:linear-gradient(180deg,#6d4c41,#4e342e,#3e2723);
+  box-shadow:
+    0 20px 45px rgba(0,0,0,.85),
+    inset 0 6px 8px rgba(255,255,255,.15);
+  margin-top:-8px;
+}
+
+.layer.small{
+  width:180px;
+  height:70px;
+  margin-top:0;
+}
+
+.frost{
+  height:22px;
+  background:white;
+  border-radius:22px;
+  box-shadow:inset 0 -4px 6px rgba(0,0,0,.1);
+}
+
+/* ---------------- Candle ---------------- */
+.candle{
+  position:absolute;
+  top:-55px;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.stick{
+  width:8px;
+  height:48px;
+  border-radius:3px;
+  background:repeating-linear-gradient(45deg,#fff 0 5px,#d4af37 5px 10px);
+}
+
+.flame{
+  width:18px;
+  height:28px;
+  border-radius:50% 50% 20% 20%;
+  background:radial-gradient(circle,#fff,#ffd54f 45%,orange);
+  position:absolute;
+  top:-25px;
+  left:-5px;
+  box-shadow:0 0 50px orange;
+  animation:flicker .12s infinite alternate;
+}
+
+@keyframes flicker{
+  to{transform:scale(1.15);opacity:.85}
+}
+
+/* smoke */
+.smoke{
+  position:absolute;
+  top:-25px;
+  left:1px;
+  width:6px;
+  height:25px;
+  background:rgba(255,255,255,.6);
+  filter:blur(6px);
+  opacity:0;
+}
+
+@keyframes smokeRise{
+  0%{opacity:.8;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-90px) scale(5)}
+}
+
+/* ---------------- Wish area ---------------- */
+#wish{
+  margin-top:40px;
+  text-align:center;
+  opacity:0;
+  visibility:hidden;
+  transform:scale(.9) translateY(20px);
+  transition:1s cubic-bezier(.2,.8,.2,1);
+}
+
+#wish.show{
+  opacity:1;
+  visibility:visible;
+  transform:scale(1) translateY(0);
+}
+
+#wish h2{
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #f3e6df; 
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+}
+
+/* glowing button */
+#wish a{
+  display:inline-block;
+  margin-top:20px;
+  padding:12px 35px;
+  border:1.5px solid var(--gold);
+  border-radius:30px;
+  background: transparent;
+  color: var(--gold);
+  text-decoration:none;
+  transition:.3s;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.75rem;
+}
+
+#wish a:hover{
+  background: var(--gold);
+  color: black;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+/* ---------------- Confetti ---------------- */
+.confetti{
+  position:fixed;
+  border-radius:3px;
+  pointer-events:none;
+  z-index: 100;
+}
+</style>
+</head>
+
+<body onclick="startAudio()">
+
+<div class="bunting">
+    <div class="flag"></div><div class="flag"></div><div class="flag"></div>
+    <div class="flag"></div><div class="flag"></div><div class="flag"></div>
+    <div class="flag"></div><div class="flag"></div><div class="flag"></div>
+    <div class="flag"></div>
+</div>
+
+<h2 id="instr" class="instruction">
+Tap the screen, allow the mic, and blow into it to make a wish… just like you blew me away with your sweetness when you came into my life. 🌷🐒
+</h2>
+
+<div class="scene">
+  <div class="cake" id="cake">
+    <div class="candle">
+      <div id="flame" class="flame"></div>
+      <div id="smoke" class="smoke"></div>
+      <div class="stick"></div>
+    </div>
+    <div class="layer small"><div class="frost"></div></div>
+    <div class="layer"><div class="frost"></div></div>
+  </div>
+  <div class="table"></div>
+  <div id="wish">
+    <h2>Kanha ji has listened to your wish, faith rakho ... sabh acha hoga aapke saath sweetie ❤️</h2>
+    <a href="love.html">Open My Heart</a>
+  </div>
+  
+</div>
+
+<script>
+let ctx, analyser, blown=false;
+
+async function startAudio(){
+  if(ctx) return;
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    ctx=new AudioContext();
+    analyser=ctx.createAnalyser();
+    const mic=ctx.createMediaStreamSource(stream);
+    mic.connect(analyser);
+    const data=new Uint8Array(analyser.frequencyBinCount);
+
+    function listen(){
+      if(blown) return;
+      analyser.getByteFrequencyData(data);
+      const avg=data.reduce((a,b)=>a+b)/data.length;
+      if(avg>45) blow();
+      requestAnimationFrame(listen);
+    }
+    listen();
+  }catch{
+    document.body.onclick = blow;
+  }
+}
+
+function blow(){
+  if(blown) return;
+  blown=true;
+
+  const flame = document.getElementById('flame');
+  const smoke = document.getElementById('smoke');
+  const instr = document.getElementById('instr');
+  
+  flame.style.display="none";
+
+  for(let i=0;i<4;i++){
+    setTimeout(()=>{
+      smoke.style.animation="none";
+      smoke.offsetHeight;
+      smoke.style.animation="smokeRise 2s forwards";
+      const cake = document.getElementById('cake');
+      cake.style.transition="1.5s";
+      cake.style.filter="brightness(.7)";
+    },i*250);
+  }
+
+  confetti();
+  instr.style.opacity=0;
+
+  setTimeout(()=>{
+    document.getElementById("wish").classList.add("show");
+  },500);
+}
+
+function confetti(){
+  for(let i=0;i<160;i++){
+    const c=document.createElement("div");
+    const size=6+Math.random()*6;
+    c.className="confetti";
+    c.style.width=size+"px";
+    c.style.height=size+"px";
+    c.style.background=`hsl(${Math.random()*360},80%,60%)`;
+    c.style.left=Math.random()*100+"vw";
+    c.style.top="-10px";
+    document.body.appendChild(c);
+    const fall=700+Math.random()*400;
+    c.animate([
+      {transform:"rotate(0deg)",opacity:1},
+      {transform:`translateY(${fall}px) rotate(${Math.random()*720}deg)`,opacity:0}
+    ],{
+      duration:1800+Math.random()*1200,
+      easing:"ease-in"
+    });
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+</script>
+
+</body>
+</html>

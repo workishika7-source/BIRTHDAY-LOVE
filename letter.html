@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Heart to Yours 💌</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Playfair+Display:ital,wght@1,400&family=Great+Vibes&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg-maroon: #3b1111;
+    --beige: rgba(245, 230, 220, 0.96);
+    --gold: #d4af37;
+    --dark: #2b0d0d;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+body{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:Montserrat;
+    background:
+        radial-gradient(circle at 30% 20%, #5b1a1a 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, #2a0808 0%, transparent 40%),
+        linear-gradient(135deg,#150303,#000);
+    overflow:hidden;
+}
+
+/* ===== FLOATING HEARTS ===== */
+.heart-container{ position:absolute; inset:0; pointer-events:none; z-index:1; }
+.heart{ position:absolute; color:var(--gold); opacity:.25; animation:floatUp linear infinite; filter:drop-shadow(0 0 6px var(--gold)); }
+
+@keyframes floatUp{
+    from{transform:translateY(110vh) scale(.8); opacity:0}
+    15%{opacity:.4}
+    to{transform:translateY(-10vh) scale(1.2); opacity:0}
+}
+
+/* ===== MAIN BOX WITH GLOW EFFECT ===== */
+.content-box{
+    position:relative;
+    z-index:10;
+    width:85vw;
+    max-width:620px;
+    height:75vh;
+    padding:40px;
+    border-radius:30px;
+    background:var(--beige);
+    box-shadow: 0 30px 80px rgba(0,0,0,.8);
+    display:flex;
+    flex-direction:column;
+    animation:fadeIn 1.4s ease;
+}
+
+/* ⭐ BEAUTIFUL GLOWING BORDER EFFECT ⭐ */
+.content-box::before{
+    content:"";
+    position:absolute;
+    inset:-3px;
+    border-radius:33px;
+    background:linear-gradient(45deg, var(--gold), transparent, var(--gold), transparent, var(--gold));
+    background-size:400% 400%;
+    z-index:-1;
+    animation:borderGlow 8s linear infinite;
+    filter: blur(2px);
+}
+
+@keyframes borderGlow{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(.95)}
+    to{opacity:1; transform:scale(1)}
+}
+
+.letter-title{
+    font-family:'Great Vibes';
+    font-size:2.8rem;
+    text-align:center;
+    color:var(--dark);
+    margin-bottom:15px;
+}
+
+#letter-content{
+    flex:1;
+    overflow-y:auto; 
+    font-family:'Dancing Script', cursive; 
+    font-size:1.45rem;
+    line-height:1.6;
+    color:var(--dark);
+    padding-right: 10px;
+    scroll-behavior: smooth;
+}
+
+#letter-content::-webkit-scrollbar{width:5px}
+#letter-content::-webkit-scrollbar-thumb{ background:var(--gold); border-radius:10px; }
+
+.cursor{ width:2px; display:inline-block; background:var(--gold); margin-left:5px; animation:blink 1s infinite; }
+@keyframes blink{50%{opacity:0}}
+
+#music-toggle{
+    position:absolute; top:20px; right:20px;
+    background:rgba(0,0,0,.4); border:1px solid var(--gold); color:var(--gold);
+    padding:9px 18px; border-radius:50px; font-size:10px; cursor:pointer; z-index:100;
+}
+
+#replay-btn{
+    margin-top:20px; padding:12px 35px; background:var(--bg-maroon); color:white;
+    border-radius:40px; border:1px solid var(--gold); text-decoration:none;
+    font-size:11px; letter-spacing:3px; opacity:0; pointer-events:none; transition:.3s; text-align: center;
+}
+#replay-btn.visible{ opacity:1; pointer-events:auto; }
+</style>
+</head>
+
+<body onclick="playSong()">
+
+<div class="heart-container" id="heartBox"></div>
+
+<audio id="bg-song" loop>
+    <source src="Samjhawan-(Mr-Jat.in).mp3">
+</audio>
+
+<button id="music-toggle" onclick="toggleMusic()">Music: On</button>
+
+<div class="content-box">
+    <h1 class="letter-title">Dearest Lovie...</h1>
+    <div id="letter-content">
+        <span id="typed-text"></span>
+        <span class="cursor" id="cursor">|</span>
+    </div>
+    <a href="index.html" id="replay-btn">Back to Start</a>
+</div>
+
+<script>
+const message = ["Heyyy my kuchupuchu , my rasmalai , my bandar , my cutie patotie , my cuppicake , my sunshine , my everythinggggggggggggg.... 🫀" ,
+"Happiest Birthday to youuuuuuuuuuuuuuuuuu!!! 🎉🎈" , 
+"Hope so abhi tak aapka birthday acha raha ho .",
+"Vese to aap mere saath ho , to shyd abhi tak aapke 21 gifts khul gaye honge .. if tab tak sabh 21 gifts complete ho gaye ho , hope so aapko sabh acha lage ." , 
+"Letter to aapko obv mil hi gaya but uss letter mai limit thi .",
+"Iss letter mai limit nahi ...aur mai to aapke liye likhne bethu toh bhas mera dil hi jaanta hai ... mai to kabhi inh haatho ko na rokna chahu aapke liye likhne se ." , 
+"You know what love feels like ? ",
+"Idk aapko pata hai ya nahi but jab bhi aapke baare mai sochti hu(har samay) toh lagta hm shyd yhi hai 'pyaar' " ,
+"Maybe not completely but jo bhi hai mere liye bhot pyaara hai ." , 
+"Pata hai from the first day jabse mene tmhe dekha tha , awww I already knew somethings gonna happen and it did happen ... mai to hmesha hi shi hoti hu ." ,
+"Maybe I'll not accept this but kisi kone mai I always liked you ... maybe bhot kam , but I did...",
+"Pata hai mene kabhi relationship ke baare mai socha nahi apne kyuki at some corner I accepted my faith , I knew , I can't wish for someone who love me back ... aur bhagwaan ne mjhe sbse aacha partner de dia " , 
+"HMMMMM ... no one's perfect but for me you are perfect .",
+"Idk about others but mere liye sabse pyaara ladka mera divyam hai " ,
+"Sem 1 mai mjhe mere silent era se na jaante hue bhi bhar nikaalne ke liye thank you " , 
+"Thank You mjhe bht special treat krne ke liye " , 
+"Thank you for being there for me in my ups and downs " , 
+"Thank you for being my best friend " , 
+"Thank You for loving me ." , 
+"Thank YOu for choosing me and making me believe that I'm not that hard to love " , 
+"Thank You meri sabh zidd puri krne ke liye ." ,
+"Thank you mjhe tolerate krne ke liye",
+"Mere Thank You kbhi enough nahi honge tere liye",
+"Idk why but you are so sweet to me , maybe because you love me a lot",
+"Tune meri bhot cheezein accept ki ... aur unme se sabse badi hai mera express na karna ...",
+"ik tu ek esa ladka hai jisse mjhe khone ka dar hai aur isse mai time to time reassurance deke comfort kr skti hu but express krna mere liye hai hi nahi " , 
+"Aur tune isse bhi accept kia hai ." ,
+"tune bhot baar bola hai mai itna bhi bura bf nahi hu , i never said that to you or anyone ... qki mai ye maanti hi nahi , mere liye sabse acha hi tu hai .",
+"Express ke naam pe text hi kr paati hu , idk kyu hu mai esi " , 
+"but tune mjhe kabhi mjhpe doubt nahi karwaya isme ",
+"Tujhe nahi pata tu kitna zyda special hai mere liye ... and idk ki yaha things workout kregi ya nahi but I genuinely pray ki sabh kch bht ho ... aur if if if hum nahi bhi rahe saath ,",
+"Toh kabhi rona mat ...Hamesha yaad rkhna ki Ishika has a special place for you jo ki vo kisi ko nahi dikhayegi but hmesha yahi rhega ." , 
+"I hope so hum saath end up ho ... but ye bolna to selfish hoga aur jaha selfishness aajati h vaha pyaar ni hota... ",
+"Mai chahungi tu har pal khush rahe aur bhot zydaaaa success mile tjhe .",
+"Mere paas humesha safe h tu ... mere saath safe nahi hai qki mai to teri chutney esi hi bna deti hu but mere paas hmesha rhega.",
+"Sabse chupaake aur sabse pyaar se rakhungi tjhe ... marungi zrur but " , 
+"Tere liye to jitna bhi likh lu utna kam hai ... " , 
+"Pata hai ....ruk ...mjhe to pata hi hai ... tujhe bta deti hu .",
+"Toh SUNNNNNNNN ...",
+"Tu sabse pyaara hai mera divyam .",
+"Tu mere liye best hai aur mere liye bhot zydaaaa enough hai",
+"Ik things aren't that well but mere liye tu kabhi bura ni ban sakta tu ..",
+"Mere khudse phele tu hai mere liye ..." , 
+"Tu sabse best partner hai Ishika Rawat ke liye ...",
+"samjhe Kamlesh Singh Samant ke bete jii ??",
+"Dil karta hai tjhe dekhti jau aur apne paaas pyaar se khilati jau ... mai bhar jau kamake aau aur tjhe sabh du jo tjhe chaiye ... aur tu ghr pe mere liye bhs shaam ko maggie bna dena... Deal??",
+"Tere liye words kam hai.",
+"But I GENUINELY LOVE YOU MY DIVYAM 🫀"
+];
+
+let line=0, char=0;
+const target=document.getElementById('typed-text');
+const scrollContainer = document.getElementById('letter-content');
+const btn=document.getElementById('replay-btn');
+const song=document.getElementById('bg-song');
+
+function typeWriter(){
+    if(line < message.length){
+        if(char < message[line].length){
+            target.innerHTML += message[line][char++];
+            
+            // ⭐ Smoothly scroll to bottom
+            scrollContainer.scrollTop = scrollContainer.scrollHeight;
+
+            setTimeout(typeWriter, 70); 
+        }
+        else{
+            target.innerHTML += "<br>";
+            char = 0; 
+            line++;
+            setTimeout(typeWriter, 600);
+        }
+    }
+    else{
+        document.getElementById('cursor').style.display = "none";
+        btn.classList.add('visible');
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
+}
+
+function playSong(){ song.play(); document.getElementById('music-toggle').innerText = "Music: On"; }
+function toggleMusic(){ 
+    if(song.paused) { song.play(); document.getElementById('music-toggle').innerText = "Music: On"; }
+    else { song.pause(); document.getElementById('music-toggle').innerText = "Music: Off"; }
+}
+
+const hb=document.getElementById("heartBox");
+for(let i=0;i<40;i++){
+    const h=document.createElement("div");
+    h.className="heart"; h.innerHTML="❤";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(15+Math.random()*15)+"px";
+    h.style.animationDuration=(7+Math.random()*8)+"s";
+    hb.appendChild(h);
+}
+
+window.onload=()=>setTimeout(typeWriter,1000);
+</script>
+
+</body>
+</html>

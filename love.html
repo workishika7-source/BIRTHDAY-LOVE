@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>21 Wishes for You 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Playfair+Display:ital,wght@1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-maroon: #1a0505;
+            --heart-base: #ff4d6d;
+            --heart-glow: #ff85a1;
+            --gold: #d4af37;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at center, #3b1111 0%, #0a0202 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+        }
+
+        /* --- BACKGROUND GLOW --- */
+        .glow-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, rgba(255, 77, 109, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* --- THE SEAMLESS GLOWING HEART --- */
+        .heart-container {
+            position: relative;
+            z-index: 10;
+            filter: drop-shadow(0 0 25px var(--heart-base)) drop-shadow(0 0 50px rgba(255, 77, 109, 0.4));
+            animation: breathe 3s infinite ease-in-out;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .heart-container:active { transform: scale(0.95); }
+
+        .big-heart {
+            width: 140px;
+            height: 140px;
+            background: var(--heart-base);
+            position: relative;
+            transform: rotate(-45deg);
+        }
+
+        .big-heart::before, .big-heart::after {
+            content: "";
+            width: 140px;
+            height: 140px;
+            background: var(--heart-base);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .big-heart::before { top: -70px; left: 0; }
+        .big-heart::after { left: 70px; top: 0; }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg) scale(1); 
+                filter: drop-shadow(0 0 15px var(--heart-base)) drop-shadow(0 0 30px rgba(255, 77, 109, 0.3));
+            }
+            50% { 
+                transform: translateY(-10px) rotate(2deg) scale(1.08); 
+                filter: drop-shadow(0 0 35px var(--heart-base)) drop-shadow(0 0 70px rgba(255, 77, 109, 0.6));
+            }
+        }
+
+        /* --- CUTE FALLING PETAL WISHES --- */
+        .wish-petal {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 1rem;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        #counter {
+            position: absolute;
+            bottom: 5%;
+            color: var(--gold);
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body onclick="handleFirstInteraction()">
+
+    <div class="glow-overlay"></div>
+    <h1 style="position:absolute; top:10%; color:#d6c5bc; font-family:'Playfair Display'; font-style:italic; opacity:0.7;">
+        Tap the heart to release my wishes...✨
+    </h1>
+
+    <div class="heart-container">
+        <div class="big-heart"></div>
+    </div>
+
+    <div id="counter">Wishes Shared: <span id="count-num">0</span> / 21</div>
+    
+    <audio id="bg-song" loop>
+        <source src="Saibo Shor In The City Original Motion Picturetrack 320 Kbps.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const song = document.getElementById("bg-song");
+        let musicStarted = false;
+
+        function handleFirstInteraction() {
+            // Start the music on the first tap
+            if (!musicStarted) {
+                song.play().catch(error => console.log("Playback failed:", error));
+                musicStarted = true;
+            }
+            releaseWish();
+        }
+
+        const wishes = [
+            "Your smile, always stay happy ✨",
+            "Midnight talks that make time stop 🌙",
+            "Always being each other's safe place ❤️",
+            "Morning coffee shared with you ☕",
+            "Travel to places we've only dreamed of ✈️",
+            "Growing old, but staying young at heart 🧿",
+            "Countless cozy movie nights 🍿",
+            "To be your favorite adventure 🌊",
+            "Success in everything you touch 🏆",
+            "Infinite patience for our messy days 🧩",
+            "A lifetime of holding your hand 🤝",
+            "Surprises that make your eyes sparkle ✨",
+            "A home filled with warmth and peace 🏠",
+            "Never losing our spark 🔥",
+            "Celebrating every small win of yours 🎉",
+            "Deep conversations under the stars ✨",
+            "Being your partner in every crime 🕵️‍♀️",
+            "A heart that always feels safe with me 💖",
+            "New memories created every single day 📸",
+            "Quiet moments of pure happiness ☁️",
+            "A love that only grows stronger with time ❤️"
+        ];
+
+        let wishIndex = 0;
+
+        function releaseWish() {
+            if (wishIndex >= 21) {
+                window.location.href = "letter.html";
+                return;
+            }
+
+            const wish = document.createElement('div');
+            wish.className = 'wish-petal';
+            wish.innerText = wishes[wishIndex];
+            wish.style.left = '50%';
+            wish.style.top = '50%';
+            document.body.appendChild(wish);
+
+            const landX = (Math.random() * 80) + 10; 
+            const landY = (Math.random() * 20) + 75; 
+            const rotation = (Math.random() - 0.5) * 40; 
+
+            wish.animate([
+                { transform: 'translate(-50%, -50%) scale(0.5)', opacity: 0 },
+                { transform: 'translate(-50%, -160%) scale(1.1)', opacity: 1, offset: 0.15 },
+                { transform: `translate(calc(-50% + ${landX - 50}vw), ${landY - 50}vh) rotate(${rotation}deg) scale(1)`, opacity: 1 }
+            ], {
+                duration: 2500,
+                easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+                fill: 'forwards'
+            });
+
+            setTimeout(() => {
+                wish.animate([
+                    { opacity: 1 },
+                    { opacity: 0, transform: `translate(calc(-50% + ${landX - 50}vw), ${landY - 45}vh) scale(0.8)` }
+                ], {
+                    duration: 1200,
+                    easing: 'ease-in',
+                    fill: 'forwards'
+                });
+                setTimeout(() => wish.remove(), 1200);
+            }, 5500);
+
+            wishIndex++;
+            document.getElementById('count-num').innerText = wishIndex;
+            createSparkles();
+        }
+
+        function createSparkles() {
+            for (let i = 0; i < 8; i++) {
+                const s = document.createElement('div');
+                s.style.position = 'absolute';
+                s.style.width = '3px';
+                s.style.height = '3px';
+                s.style.background = '#fff';
+                s.style.borderRadius = '50%';
+                s.style.left = '50%';
+                s.style.top = '50%';
+                document.body.appendChild(s);
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 90 + Math.random() * 90;
+                s.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${Math.cos(angle)*dist}px), calc(-50% + ${Math.sin(angle)*dist}px)) scale(0)`, opacity: 0 }
+                ], { duration: 1000, easing: 'ease-out' });
+                setTimeout(() => s.remove(), 1000);
+            }
+        }
+    </script>
+</body>
+</html>
